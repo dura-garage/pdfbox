@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -113,6 +115,28 @@ class GsubWorkerForDevanagariTest
         // then
         assertEquals(glyphsAfterGsub, result);
     }
+    @Test
+    void testApplyTransform_reph(){
+        // given
+        List<Integer> glyphsAfterGsub = Arrays.asList(538,352,673);
+        // when
+        List<Integer> result = gsubWorkerForDevanagari.applyTransforms(getGlyphIds("र्थ्यो"));
+
+        // then
+        assertEquals(glyphsAfterGsub, result);
+    }
+    @Test
+    void testApplyTransform_private_rephPosition() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method privateMethod = GsubWorkerForDevanagari.class.getDeclaredMethod("adjustRephPosition", List.class);
+        privateMethod.setAccessible(true);
+        // given
+        List<Integer> glyphsAfterGsub = Arrays.asList(342,382,352,380,353,382);
+        //when
+        List<Integer> result = (List<Integer>) privateMethod.invoke(gsubWorkerForDevanagari,getGlyphIds("र्थ्यो"));
+        assertEquals(glyphsAfterGsub, result);
+
+    }
+
 
     @Disabled
     @Test
