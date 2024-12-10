@@ -59,12 +59,23 @@ public class GsubWorkerForDevanagari implements GsubWorker
     // Devanagari vowel sign I
     private static final char BEFORE_HALF_CHAR = 'ि';
 
+    // Consonants with no half forms
+    private static final List<Character> NO_HALF_CONSONANTS= Arrays.asList(
+            'ङ',
+            'ट',
+            'ठ',
+            'ड',
+            'ढ',
+            'द');
+
     private final CmapLookup cmapLookup;
     private final GsubData gsubData;
     
     private final List<Integer> rephGlyphIds;
     private final List<Integer> beforeRephGlyphIds;
     private final List<Integer> beforeHalfGlyphIds;
+    private final List<Integer> noHalfCharacterGlyphIds;
+
 
     GsubWorkerForDevanagari(CmapLookup cmapLookup, GsubData gsubData)
     {
@@ -73,6 +84,7 @@ public class GsubWorkerForDevanagari implements GsubWorker
         beforeHalfGlyphIds = getBeforeHalfGlyphIds();
         rephGlyphIds = getRephGlyphIds();
         beforeRephGlyphIds = getbeforeRephGlyphIds();
+        noHalfCharacterGlyphIds = getNoHalfConsonants();
     }
 
     @Override
@@ -200,8 +212,12 @@ public class GsubWorkerForDevanagari implements GsubWorker
                 int prevGlyph = repositionedGlyphIds.get(prevIndex);
                 if (beforeHalfGlyphIds.contains(prevGlyph))
                 {
-                    repositionedGlyphIds.remove(prevIndex);
-                    repositionedGlyphIds.add(nextIndex--, prevGlyph);
+                    int nextGlyph = repositionedGlyphIds.get(nextIndex);
+                    if(!noHalfCharacterGlyphIds.contains(nextGlyph)){
+                        repositionedGlyphIds.remove(prevIndex);
+                        repositionedGlyphIds.add(nextIndex--, prevGlyph);
+                    }
+
                 }
             }
             foundIndex = nextIndex--;
@@ -250,6 +266,16 @@ public class GsubWorkerForDevanagari implements GsubWorker
             result.add(getGlyphId(character));
         }
         return Collections.unmodifiableList(result);
+    }
+
+    private List<Integer> getNoHalfConsonants()
+    {
+        List<Integer> glyphIds = new ArrayList<>();
+        for (char character : NO_HALF_CONSONANTS)
+        {
+            glyphIds.add(getGlyphId(character));
+        }
+        return Collections.unmodifiableList(glyphIds);
     }
 
     private List<Integer> getbeforeRephGlyphIds()
