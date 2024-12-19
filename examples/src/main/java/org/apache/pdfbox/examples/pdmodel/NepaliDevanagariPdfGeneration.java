@@ -51,7 +51,7 @@ public class NepaliDevanagariPdfGeneration {
                 // Show font name
                 contentStream.showText(fontName);
                 // Move down for spacing (e.g., 2x the leading)
-                contentStream.newLineAtOffset(0, -2 * leading);
+                contentStream.newLineAtOffset(0, -1 * leading);
 
                 // Split and show the text
                 List<String> wrappedText = wrapText(text, pdfFont, fontSize, page.getMediaBox().getWidth() - 2 * startX);
@@ -63,7 +63,7 @@ public class NepaliDevanagariPdfGeneration {
                 contentStream.endText();
 
                 // Update the startY position for the next font block
-                startY -= wrappedText.size() * leading + 3 * leading; // Extra gap between font blocks
+                startY -= wrappedText.size() * leading + 1.5 * leading; // Extra gap between font blocks
             }
 
 
@@ -84,8 +84,8 @@ public class NepaliDevanagariPdfGeneration {
         String kokila = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/Kokila.ttf";
         String nirmala = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/Nirmala.ttf";
         String mangal = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/MangalRegular.ttf";
-        String lohit = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/Lohit-Devanagari.ttf";
-        String tiro = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/TiroDevanagariHindi-Regular.ttf";
+        String lohit = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/LohitDevanagari.ttf";
+        String tiro = "examples/src/main/resources/org/apache/pdfbox/resources/ttf/TiroDevanagariHindiRegular.ttf";
 
         Map<String, String> fontMap = new HashMap<>();
         fontMap.put("नोटो सान्स देवनागरी", noto);
@@ -129,7 +129,7 @@ public class NepaliDevanagariPdfGeneration {
 //                "\"श्र\", \"द्य\", \"क्ष्म\" जस्ता अक्षरहरूले यसको जटिलता झल्काउँछन्।";
 //        String text = " र्क र्का र्कि र्की र्के र्कै र्को र्कौ र्कँ र्न्थ्यि र्थ्यो";
 
-        String textOnPdf = "र्थ्यो धार्ष्ट्य्र भर्त्स्यौनी वर्त्स्य र् सङ्क्षिप्त";
+        String textOnPdf = " र्के र्खे र्थ्यो राष्ट्रिय भर्त्स्यौनी वर्त्स्य सङ्क्षिप्त छन्";
         return textOnPdf;
     }
 }
